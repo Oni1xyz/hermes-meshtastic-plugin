@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - name: Check out plugin
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Check out Hermes Agent API dependency
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: NousResearch/hermes-agent
+          ref: 187e5b2b956a5fdc367397b6063b2be17d88e0a7 # pragma: allowlist secret
+          path: .hermes-agent
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked --extra test
+
+      - name: Run tests
+        env:
+          HERMES_AGENT_SOURCE: ${{ github.workspace }}/.hermes-agent
+        run: uv run pytest -q
+
+      - name: Lint
+        run: uvx 'ruff==0.17.0' check adapter.py __init__.py tests
+
+      - name: Check formatting
+        run: uvx 'ruff==0.17.0' format --check adapter.py __init__.py tests
+
+      - name: Validate plugin registration
+        if: matrix.python-version == '3.11'
+        run: >-
+          uv run --project .hermes-agent
+          --with 'meshtastic>=2.5,<3'
+          --with 'pypubsub>=4,<5'
+          --with 'pyserial>=3.5,<4'
+          hermes plugins doctor "${GITHUB_WORKSPACE}" --ci

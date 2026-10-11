@@ -1,0 +1,11 @@
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.venv/
+.hermes-agent/
+.coverage
+build/
+dist/
+*.egg-info/
+*.py[cod]
+.DS_Store

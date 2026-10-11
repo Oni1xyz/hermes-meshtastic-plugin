@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hermes-meshtastic-plugin"
+version = "0.1.0"
+description = "Meshtastic direct-message gateway platform plugin for Hermes Agent"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Oni1xyz" }]
+requires-python = ">=3.11,<3.14"
+dependencies = ["meshtastic>=2.5,<3", "pypubsub>=4.0,<5", "pyserial>=3.5,<4"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+]
+
+[project.urls]
+Homepage = "https://github.com/Oni1xyz/hermes-meshtastic-plugin"
+Repository = "https://github.com/Oni1xyz/hermes-meshtastic-plugin"
+Issues = "https://github.com/Oni1xyz/hermes-meshtastic-plugin/issues"
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10", "pytest-asyncio>=0.24,<2", "PyYAML>=6,<7"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["N999"]  # Checkout directory is intentionally hyphenated.

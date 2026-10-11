@@ -1,0 +1,26 @@
+name: meshtastic
+label: Meshtastic
+kind: platform
+version: 0.1.0
+description: >
+  Serial Meshtastic direct-message gateway adapter for Hermes Agent.
+  Accepts only allowlisted TEXT_MESSAGE_APP packets addressed to the attached node.
+author: Oni1xyz
+requires_env:
+  - name: MESHTASTIC_ALLOWED_USERS
+    description: "Comma-separated Meshtastic node IDs allowed to message Hermes (for example !11223344)"
+    prompt: "Allowed Meshtastic node IDs (comma-separated; empty denies all)"
+    password: false
+optional_env:
+  - name: MESHTASTIC_USB_SERIAL
+    description: "Exact USB serial number used for stable serial-port discovery (recommended)"
+    prompt: "Radio USB serial number"
+    password: false
+  - name: MESHTASTIC_PORT
+    description: "Explicit serial device path; overrides USB serial discovery"
+    prompt: "Serial device path (optional)"
+    password: false
+  - name: MESHTASTIC_HOME_NODE
+    description: "Allowlisted direct-message node ID used for cron/home delivery"
+    prompt: "Home Meshtastic node ID (optional)"
+    password: false
